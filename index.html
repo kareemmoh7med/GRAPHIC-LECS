@@ -1,247 +1,191 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>معمل الجرافيك التطبيقي</title>
+<title>km_graph — 2D/3D Graphics Editor</title>
 <style>
-:root{--bg:#0b1020;--card:#151b33;--line:#27305a;--tx:#e8ecff;--mut:#9aa6d6;--a:#6ea8ff;--b:#ff9a56;--g:#3ddc97}
+:root{--bg:#0a0f22;--cd:#141a36;--ln:#28315e;--tx:#e8ecff;--mu:#97a3d4;--a:#6ea8ff;--b:#ff9a56;--g:#3ddc97}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(900px 500px at 80% -10%,#26307a55,transparent),var(--bg);color:var(--tx);font:16px/1.7 system-ui,"Segoe UI",Tahoma,sans-serif}
-header{padding:28px 16px 8px;text-align:center}
-h1{margin:0;font-size:clamp(24px,5vw,40px);background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
-header p{color:var(--mut);margin:6px 0 0}
-nav{position:sticky;top:0;z-index:9;display:flex;gap:6px;overflow-x:auto;padding:10px 12px;background:#0b1020ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-nav button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:99px;cursor:pointer;font:inherit}
-nav button.on{background:linear-gradient(90deg,var(--a),#8b7bff);border-color:transparent;color:#fff}
-main{max-width:1100px;margin:auto;padding:16px}
-section{display:none}section.on{display:block}
-h2{margin:8px 0 12px}h3{margin:14px 0 6px;color:var(--a)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.g2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
-.hc{cursor:pointer;transition:.2s}.hc:hover{transform:translateY(-3px);border-color:var(--a)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{background:#1e2650;border:1px solid var(--line);border-radius:10px;padding:4px 10px}
-label{display:inline-flex;align-items:center;gap:6px;margin:4px 8px 4px 0;color:var(--mut)}
-input,select{background:#0e1430;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;max-width:100%}
-input[type=number]{width:70px}input[type=text]{width:200px}input[type=range]{padding:0;width:150px}
-button.b{background:var(--a);color:#06122e;border:0;border-radius:8px;padding:7px 12px;cursor:pointer;font:inherit;font-weight:600}
-button.b.o{background:var(--b)}button.b.s{background:#2a3470;color:var(--tx)}
-canvas{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--line);background:#0e1430}
-.ltr{direction:ltr;text-align:left;font-family:ui-monospace,Consolas,monospace}
-table{border-collapse:collapse;direction:ltr;margin:6px 0}
-td,th{border:1px solid var(--line);padding:3px 9px;text-align:center}
-th{background:#1e2650}
-table.m{border:0}table.m td{border:0;padding:1px 8px}
-.mx{display:inline-block;border-left:2px solid var(--tx);border-right:2px solid var(--tx);border-radius:6px;vertical-align:middle;margin:2px 4px}
-.row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
-.ok{color:var(--g)}.bad{color:#ff6b7a}.mut{color:var(--mut)}
-.pre{margin:4px 4px 4px 0}
-#px{display:grid;gap:0;direction:ltr}
-#px td{font-size:9px;padding:1px 2px;min-width:22px}
-.tl{border-right:3px solid var(--a);padding-right:14px}
-.tl div{margin:8px 0;position:relative}.tl div:before{content:"";position:absolute;right:-21px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--b)}
-footer{text-align:center;color:var(--mut);padding:24px}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 system-ui,"Segoe UI",Tahoma,sans-serif}
+header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--ln);background:#0d1330}
+.logo{font-weight:800;font-size:20px;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent;margin-right:8px}
+button,select,input{font:inherit}
+button{background:#222b5c;color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:6px 11px;cursor:pointer}
+button:hover{border-color:var(--a)}button.on,button.pr{background:linear-gradient(90deg,var(--a),#8b7bff);color:#fff;border-color:transparent}
+select,input[type=number],input[type=text]{background:#0c1230;color:var(--tx);border:1px solid var(--ln);border-radius:6px;padding:4px 6px}
+input[type=number]{width:64px}input[type=color]{width:34px;height:28px;padding:0;border:0;background:none}
+.app{display:grid;grid-template-columns:270px 1fr 270px;gap:10px;padding:10px;max-width:1500px;margin:auto}
+@media(max-width:1000px){.app{grid-template-columns:1fr}}
+.cd{background:var(--cd);border:1px solid var(--ln);border-radius:12px;padding:10px;margin-bottom:10px}
+.cd h4{margin:0 0 6px;color:var(--a);font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.r{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}
+label{color:var(--mu);display:inline-flex;gap:4px;align-items:center}
+canvas{width:100%;height:auto;border:1px solid var(--ln);border-radius:12px;background:#0e1430;touch-action:none;display:block}
+table{border-collapse:collapse;direction:ltr;font-size:12px}td,th{border:1px solid var(--ln);padding:2px 7px;text-align:center}th{background:#1e2650}
+.mx{display:inline-block;border-left:2px solid var(--tx);border-right:2px solid var(--tx);border-radius:5px;padding:0 2px}.mx td{border:0}
+#log{max-height:170px;overflow:auto;font-size:12px;color:var(--mu)}#log div{border-bottom:1px solid var(--ln);padding:2px 0}
+.hint{color:var(--mu);font-size:12px}
+.hid{display:none!important}
+footer{text-align:center;padding:18px;color:var(--mu)}footer a{color:var(--b);font-weight:700;text-decoration:none}footer a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
-<header><h1>🎨 معمل الجرافيك التطبيقي</h1><p>Computer Graphics &amp; Imaging — تطبيق عملي تفاعلي على كل المحاضرات</p></header>
-<nav id="nav"></nav>
-<main>
-
-<section id="home">
-<div class="grid">
-<div class="card hc" data-go="l1"><h3>📘 المحاضرة 1</h3><b>مقدمة في الجرافيك</b><p class="mut">تعريف الجرافيك، الصورة الرقمية، Sampling و Quantisation — جرّب بنفسك على صورة.</p></div>
-<div class="card hc" data-go="tf"><h3>📐 المحاضرات 2 و 3 و 4</h3><b>التحويلات الهندسية</b><p class="mut">Translation, Scaling, Rotation, Reflection, والـ pivot/arbitrary point مع المصفوفات وخطوات الحل.</p></div>
-<div class="card hc" data-go="mp"><h3>🔢 محاضرة المعالج</h3><b>Microprocessor والأنظمة العددية</b><p class="mut">تاريخ المعالجات، محوّل الأنظمة (2/8/10/16/أي base)، ASCII و BCD و Little Endian.</p></div>
-<div class="card hc" data-go="qz"><h3>🧠 اختبر نفسك</h3><b>أسئلة عشوائية</b><p class="mut">أسئلة مولّدة تلقائيًا على أمثلة المحاضرات مع شرح الحل.</p></div>
+<header>
+<span class="logo">km_graph</span>
+<button data-m="2" class="on">2D</button><button data-m="3">3D</button><button data-m="i">Image</button>
+<span style="flex:1"></span>
+<button id="un">↶ Undo</button><button id="re">↷ Redo</button><button id="dl">⬇ PNG</button>
+</header>
+<div class="app">
+<div>
+ <div class="cd" data-md="2"><h4>Draw tools</h4>
+  <div class="r" id="tools"><button data-t="sel" class="on">Select/Move</button><button data-t="poly">Polygon</button><button data-t="rect">Rect</button><button data-t="circ">Circle</button></div>
+  <div class="r"><label>Color <input type="color" id="col" value="#6ea8ff"></label><label><input type="checkbox" id="grid" checked>Grid</label><label><input type="checkbox" id="snap" checked>Snap</label></div>
+  <div class="r"><button id="del">Delete</button><button id="clr">Clear</button></div>
+  <div class="r"><select id="pre2"><option value="">Lecture examples…</option><option>A(3,4) B(6,4) C(5,6)</option><option>a(2,2) b(8,2) c(5,5)</option><option>A(2,7) B(7,10) C(10,2)</option><option>A(0,0) B(2,2) C(4,2)</option><option>a(2,2) b(10,2) c(5,5)</option></select></div>
+  <div class="hint">Polygon: click points, double-click/Enter to close. Shift+click = set custom pivot. Wheel = zoom.</div>
+ </div>
+ <div class="cd" data-md="3"><h4>3D object</h4>
+  <div class="r"><select id="pre3"><option value="cube">Cube</option><option value="pyr">Pyramid</option><option value="tet">Lecture: A(0,3,1) B(3,3,2) C(3,0,0) D(0,0,0)</option><option value="prism">Prism</option></select><label><input type="checkbox" id="per" checked>Perspective</label></div>
+  <div class="hint">Drag = orbit, wheel = zoom.</div>
+ </div>
+ <div class="cd" data-md="23"><h4>Transform</h4>
+  <div class="r"><select id="op"></select></div>
+  <div class="r"><span id="pa"><label id="la">a<input type="number" id="a" step="any"></label><label id="lb">b<input type="number" id="b" step="any"></label><label id="lc">c<input type="number" id="c" step="any"></label></span><select id="rf"></select></div>
+  <div class="r"><label>Pivot <select id="pv"><option value="o">Origin</option><option value="c">Object center</option><option value="p">Custom</option></select></label></div>
+  <div class="r"><label>x<input type="number" id="pxv" value="0" step="any"></label><label>y<input type="number" id="pyv" value="0" step="any"></label><label id="lz">z<input type="number" id="pzv" value="0" step="any"></label></div>
+  <div class="r"><button class="pr" id="ap">Apply</button><span class="hint">Applies to selected shape (or all)</span></div>
+ </div>
+ <div class="cd" data-md="i"><h4>Image lab</h4>
+  <div class="r"><input type="file" id="fl" accept="image/*"></div>
+  <div class="r"><label>Sampling <select id="iN"><option>8<option>16<option>32<option>64<option selected>128<option>256</select></label></div>
+  <div class="r"><label>Bits <input type="range" id="iq" min="1" max="8" value="8"><b id="iqv">8</b></label></div>
+  <div class="r"><label><input type="checkbox" id="ig">Gray</label><label><input type="checkbox" id="ifx">Flip X</label><label><input type="checkbox" id="ify">Flip Y</label></div>
+  <div class="r"><label>Rotate° <input type="number" id="ir" value="0"></label><label>Scale <input type="number" id="is" value="1" step="0.1"></label></div>
+  <label><input type="checkbox" id="ism">Smooth display</label>
+ </div>
 </div>
-<div class="card"><h3>إزاي تستخدم الموقع؟</h3><p>اختار أي محاضرة من الشريط فوق. في معمل التحويلات استخدم الأمثلة الجاهزة (Presets) اللي هي نفس أمثلة الدكتورة، وشوف المصفوفة والنتيجة على الرسم مباشرة.</p></div>
-</section>
-
-<section id="l1">
-<h2>المحاضرة 1: Introduction to Computer Graphics</h2>
-<div class="card"><h3>What is Computer Graphics?</h3>
-<p>فرع من علوم الحاسب مختص بـ إنشاء وتمثيل وعرض ومعالجة وتخزين المحتوى المرئي باستخدام الكمبيوتر.</p>
-<div class="chips"><span class="chip">Creation — توليد الصور والمشاهد</span><span class="chip">Representation — تمثيلها رقميًا</span><span class="chip">Display — عرضها</span><span class="chip">Manipulation — تعديلها وتحويلها</span><span class="chip">Storage — حفظها</span></div></div>
-<div class="grid">
-<div class="card"><h3>Imaging</h3>التقاط الصور وتحريرها.</div>
-<div class="card"><h3>Rendering</h3>خوارزميات محاكاة انتقال الضوء (Lighting).</div>
-<div class="card"><h3>Geometry / Modeling</h3>تمثيل ومعالجة الأسطح (polygons, curves).</div>
-<div class="card"><h3>Animation</h3>إيهام الحركة بتتابع صور (keyframe, physical simulation).</div>
+<div>
+ <canvas id="cv" width="900" height="600"></canvas>
+ <canvas id="ci" width="600" height="600" class="hid"></canvas>
+ <div class="hint" id="st" style="margin-top:4px">&nbsp;</div>
 </div>
-<div class="card"><h3>Applications</h3><div class="chips"><span class="chip">GUI</span><span class="chip">Office Automation</span><span class="chip">Entertainment (أفلام/ألعاب)</span><span class="chip">Education</span><span class="chip">CAD</span><span class="chip">Scientific Visualization</span><span class="chip">Virtual Prototyping</span><span class="chip">Cultural Heritage</span><span class="chip">Training &amp; Simulation</span><span class="chip">Graphic Arts</span></div></div>
-
-<div class="card"><h3>🔬 معمل الصورة الرقمية (Digital Image Lab)</h3>
-<p class="mut">الصورة الرقمية = مصفوفة أرقام (sampled &amp; quantised). غيّر الـ Sampling (عدد البكسلات) والـ Quantisation (عدد الـ bits) وشوف الفرق. تقدر ترفع صورتك.</p>
-<div class="row">
-<label>Sampling: <select id="sN"><option>4<option>8<option selected>16<option>32<option>64<option>128</select> × N</label>
-<label>Quantisation: <input type="range" id="qb" min="1" max="8" value="8"> <b id="qv">8 bits</b></label>
-<label>العرض: <select id="sm"><option value="0">Nearest-neighbour (LCD)<option value="1">Smooth (CRT)</select></label>
-<label><input type="file" id="fl" accept="image/*"></label>
+<div>
+ <div class="cd" data-md="23"><h4>Transformation matrix</h4><div id="mat"></div></div>
+ <div class="cd" data-md="23"><h4>Vertices</h4><div id="tbl"></div></div>
+ <div class="cd" data-md="23"><h4>History log</h4><div id="log"></div></div>
 </div>
-<div class="g2"><div><canvas id="pc" width="320" height="320"></canvas><div id="pinfo" class="mut"></div></div><div style="overflow:auto"><b>الأرقام (Intensity 0–255)</b><table id="px"></table><p class="mut" id="pnote"></p></div></div></div>
-</section>
-
-<section id="tf">
-<h2>معمل التحويلات الهندسية (Lectures 2, 3, 4)</h2>
-<div class="card"><h3>أمثلة جاهزة من المحاضرات</h3><div id="pre"></div></div>
-<div class="g2">
-<div class="card" id="ctl">
-<h3>المثلث الأصلي</h3>
-<div class="row ltr"><label>A <input type="number" id="ax" value="3"><input type="number" id="ay" value="4"></label><label>B <input type="number" id="bx" value="6"><input type="number" id="by" value="4"></label><label>C <input type="number" id="cx" value="5"><input type="number" id="cy" value="6"></label></div>
-<h3>العملية</h3>
-<select id="op"><option value="t">Translation — إزاحة<option value="s">Scaling — تكبير/تصغير<option value="r">Rotation — دوران حول الأصل<option value="f">Reflection — انعكاس<option value="rp">Rotation حول نقطة (Pivot)<option value="sp">Scaling حول نقطة ثابتة</select>
-<div class="row ltr" style="margin-top:8px">
-<label class="par" data-o="t">Tx <input type="number" id="tx" value="3"></label><label class="par" data-o="t">Ty <input type="number" id="ty" value="4"></label>
-<label class="par" data-o="s sp">Sx <input type="number" id="sx" value="2" step="0.5"></label><label class="par" data-o="s sp">Sy <input type="number" id="sy" value="2" step="0.5"></label>
-<label class="par" data-o="r rp">θ° <input type="number" id="th" value="90"></label>
-<label class="par" data-o="f"><select id="rf"><option value="x">about X-axis<option value="y">about Y-axis<option value="o">about origin<option value="d">line y = x<option value="n">line y = −x</select></label>
-<label class="par" data-o="rp sp">Pivot <input type="number" id="px0" value="2"><input type="number" id="py0" value="2"></label>
 </div>
-<div class="row" style="margin-top:8px"><button class="b o" id="chain">↪ خلّي الناتج هو الأصل (تحويل متتالي)</button></div>
-<canvas id="cv" width="560" height="560" style="margin-top:10px;width:100%"></canvas>
-<div class="mut"><span style="color:#6ea8ff">■</span> الأصل &nbsp; <span style="color:#ff9a56">■</span> الناتج</div>
-</div>
-<div class="card" id="out"></div>
-</div>
-</section>
-
-<section id="mp">
-<h2>محاضرة Microprocessor والأنظمة العددية</h2>
-<div class="grid">
-<div class="card"><h3>الـ Microprocessor (µP)</h3>قلب الكمبيوتر (CPU). بيعمل 3 مهام: نقل بيانات، عمليات حسابية ومنطقية بسيطة، والتحكم في تدفق البرنامج.</div>
-<div class="card"><h3>3 خصائص تميّزه</h3>Instruction set · Bandwidth (عدد الـ bits في التعليمة) · Clock speed.</div>
-<div class="card"><h3>الـ Buses</h3>مجموعة أسلاك: Address bus, Data bus, Control bus.</div>
-</div>
-<div class="card"><h3>التسلسل التاريخي</h3><div class="tl" id="tl"></div></div>
-
-<div class="card"><h3>🔁 محوّل الأنظمة العددية</h3>
-<div class="row"><label>الرقم <input type="text" id="nv" value="1101" class="ltr"></label><label>الـ base <input type="number" id="nb" value="2" min="2" max="36"></label><label>التحويل إلى base <input type="number" id="nt" value="16" min="2" max="36"></label>
-<button class="b s" data-b="2">Binary</button><button class="b s" data-b="8">Octal</button><button class="b s" data-b="10">Decimal</button><button class="b s" data-b="16">Hex</button></div>
-<div id="nout"></div>
-<h3>مدى القيم</h3><div class="row"><label>الـ base R <input type="number" id="rr" value="2"></label><label>عدد الخانات N <input type="number" id="rn" value="8"></label></div><div id="rout"></div></div>
-
-<div class="card"><h3>🔤 Computer Data Formats</h3>
-<div class="row"><label>نص (ASCII / Unicode) <input type="text" id="at" value="Hi 5" class="ltr"></label></div><div id="aout"></div>
-<div class="row"><label>أرقام BCD <input type="text" id="bcd" value="1957" class="ltr"></label></div><div id="bout"></div>
-<div class="row"><label>Word 16-bit (Hex) <input type="text" id="wd" value="1234" class="ltr"></label></div><div id="wout"></div></div>
-</section>
-
-<section id="qz">
-<h2>🧠 اختبر نفسك</h2>
-<div class="card"><div class="row"><b>النتيجة: <span id="sc">0 / 0</span></b></div><p id="qq" style="font-size:18px"></p>
-<div class="row ltr"><input type="text" id="qa" placeholder="اكتب الإجابة"><button class="b" id="qc">تحقق</button><button class="b s" id="qn">سؤال جديد</button></div><p id="qr"></p></div>
-</section>
-</main>
-<footer>مبني بالكامل بـ HTML/CSS/JS في ملف واحد — شغّال على GitHub Pages بدون أي إعداد.</footer>
-
+<footer>devolved by <a href="https://kareem-mohamed-rust.vercel.app/" target="_blank" rel="noopener">Kareem Mohamed</a></footer>
 <script>
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-/* ===== Navigation ===== */
-const tabs=[['home','🏠 الرئيسية'],['l1','المحاضرة 1'],['tf','التحويلات 2-4'],['mp','المعالج والأنظمة'],['qz','اختبار']];
-$('#nav').innerHTML=tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join('');
-function go(id){$$('section').forEach(s=>s.classList.toggle('on',s.id==id));$$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==id));history.replaceState(0,0,'#'+id);scrollTo(0,0);if(id=='tf')tfRun();}
-$$('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.t));
-$$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
-
-/* ===== Lecture 1: Digital image ===== */
-const SZ=128;let SRC=new Float32Array(SZ*SZ);
-(function(){for(let j=0;j<SZ;j++)for(let i=0;i<SZ;i++){const x=i/SZ,y=j/SZ,d=Math.hypot(x-.5,y-.5);let v=.2+.5*x;if(d<.3)v=.95-d;if(Math.hypot(x-.4,y-.42)<.05||Math.hypot(x-.6,y-.42)<.05)v=.08;if(Math.abs(d-.18)<.02&&y>.52)v=.08;SRC[j*SZ+i]=v}})();
-function pix(){const N=+$('#sN').value,b=+$('#qb').value,L=2**b,k=SZ/N;$('#qv').textContent=b+' bits';
- const c=document.createElement('canvas');c.width=c.height=N;const g=c.getContext('2d'),im=g.createImageData(N,N);let h='';
- for(let j=0;j<N;j++){h+='<tr>';for(let i=0;i<N;i++){let s=0;for(let y=0;y<k;y++)for(let x=0;x<k;x++)s+=SRC[(j*k+y)*SZ+i*k+x];s/=k*k;const q=Math.round(s*(L-1)),v=Math.round(q/(L-1)*255),o=(j*N+i)*4;im.data[o]=im.data[o+1]=im.data[o+2]=v;im.data[o+3]=255;if(N<=16)h+=`<td style="background:rgb(${v},${v},${v});color:${v>128?'#000':'#fff'}">${v}</td>`}if(N<=16)h+='</tr>'}
- g.putImageData(im,0,0);const p=$('#pc').getContext('2d');p.imageSmoothingEnabled=$('#sm').value=='1';p.drawImage(c,0,0,320,320);
- $('#px').innerHTML=N<=16?h:'';$('#pnote').textContent=N<=16?'':'قلّل الـ Sampling إلى 16 أو أقل لعرض الأرقام.';
- $('#pinfo').textContent=`${N}×${N} = ${N*N} pixel · ${L} intensity level · حجم الصورة = ${N*N*b} bit (${(N*N*b/8)|0} byte)`;}
-['sN','qb','sm'].forEach(i=>$('#'+i).oninput=pix);
-$('#fl').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=SZ;const g=c.getContext('2d');g.drawImage(im,0,0,SZ,SZ);const d=g.getImageData(0,0,SZ,SZ).data;for(let i=0;i<SZ*SZ;i++)SRC[i]=(.299*d[i*4]+.587*d[i*4+1]+.114*d[i*4+2])/255;pix()};im.src=URL.createObjectURL(f)};
-pix();
-
-/* ===== Transformations ===== */
-const T=(x,y)=>[[1,0,x],[0,1,y],[0,0,1]],S=(x,y)=>[[x,0,0],[0,y,0],[0,0,1]];
-const R=a=>{a*=Math.PI/180;const c=+Math.cos(a).toFixed(10),s=+Math.sin(a).toFixed(10);return[[c,-s,0],[s,c,0],[0,0,1]]};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],N=i=>+$('#'+i).value||0;
+const I=n=>[...Array(n)].map((_,i)=>[...Array(n)].map((_,j)=>+(i==j)));
 const mul=(A,B)=>A.map((r,i)=>B[0].map((_,j)=>r.reduce((s,_,k)=>s+A[i][k]*B[k][j],0)));
-const ap=(M,p)=>[M[0][0]*p[0]+M[0][1]*p[1]+M[0][2],M[1][0]*p[0]+M[1][1]*p[1]+M[1][2]];
-const f=n=>{n=Math.round(n*1000)/1000;return n===0?0:n};
-const mat=M=>`<span class="mx"><table class="m">${M.map(r=>'<tr>'+r.map(v=>`<td>${f(v)}</td>`).join('')+'</tr>').join('')}</table></span>`;
-const REF={x:[[1,0,0],[0,-1,0],[0,0,1]],y:[[-1,0,0],[0,1,0],[0,0,1]],o:[[-1,0,0],[0,-1,0],[0,0,1]],d:[[0,1,0],[1,0,0],[0,0,1]],n:[[0,-1,0],[-1,0,0],[0,0,1]]};
-const v=id=>+$('#'+id).value||0;
-const PRE=[
-['Ex: Translate A(2,7) B(7,10) C(10,2) by (3,4)',[2,7,7,10,10,2],{op:'t',tx:3,ty:4}],
-['Translate a(2,2) b(10,2) c(5,5) by (5,6)',[2,2,10,2,5,5],{op:'t',tx:5,ty:6}],
-['Rotate a(2,2) b(8,2) c(5,5) by 90°',[2,2,8,2,5,5],{op:'r',th:90}],
-['Rotate A(0,0) B(2,2) C(4,2) by 45°',[0,0,2,2,4,2],{op:'r',th:45}],
-['Reflect A(3,4) B(6,4) C(5,6) about X-axis',[3,4,6,4,5,6],{op:'f',rf:'x'}],
-['… about Y-axis',[3,4,6,4,5,6],{op:'f',rf:'y'}],
-['… about origin',[3,4,6,4,5,6],{op:'f',rf:'o'}],
-['… about y = x',[3,4,6,4,5,6],{op:'f',rf:'d'}],
-['… about y = −x',[3,4,6,4,5,6],{op:'f',rf:'n'}],
-['Scale ×2 حول pivot (2,2)',[2,2,8,2,5,5],{op:'sp',sx:2,sy:2,px0:2,py0:2}],
-['Rotate 90° حول pivot (5,5)',[2,2,8,2,5,5],{op:'rp',th:90,px0:5,py0:5}]];
-$('#pre').innerHTML=PRE.map((p,i)=>`<button class="b s pre" data-i="${i}">${p[0]}</button>`).join('');
-$$('.pre').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.i];['ax','ay','bx','by','cx','cy'].forEach((k,i)=>$('#'+k).value=p[1][i]);for(const k in p[2])$('#'+(k=='op'?'op':k)).value=p[2][k];tfRun()});
-$('#ctl').oninput=tfRun;
-$('#chain').onclick=()=>{const q=tfRun();['ax','ay','bx','by','cx','cy'].forEach((k,i)=>$('#'+k).value=f(q[i>>1][i&1]));tfRun()};
-function tfRun(){const op=$('#op').value;$$('.par').forEach(e=>e.style.display=e.dataset.o.split(' ').includes(op)?'':'none');
- const P=[[v('ax'),v('ay')],[v('bx'),v('by')],[v('cx'),v('cy')]],px=v('px0'),py=v('py0');let st=[],ex='';
- if(op=='t'){st=[['Translation T(tx,ty)',T(v('tx'),v('ty'))]];ex="x' = x + tx ، y' = y + ty"}
- if(op=='s'){st=[['Scaling S(sx,sy)',S(v('sx'),v('sy'))]];ex="x' = sx·x ، y' = sy·y"}
- if(op=='r'){st=[['Rotation R(θ)',R(v('th'))]];ex="x' = x·cosθ − y·sinθ ، y' = x·sinθ + y·cosθ"}
- if(op=='f'){st=[['Reflection',REF[$('#rf').value]]];ex='انعكاس = مرآة للشكل حول المحور/الخط المختار'}
- if(op=='rp'||op=='sp'){const M=op=='rp'?R(v('th')):S(v('sx'),v('sy'));st=[['1) Translate pivot إلى الأصل: T(−px,−py)',T(-px,-py)],[op=='rp'?'2) Rotate R(θ)':'2) Scale S(sx,sy)',M],['3) Translate back: T(px,py)',T(px,py)]];ex='M = T(px,py) · Op · T(−px,−py) — بنطبق الخطوات من اليمين لليسار'}
- let M=[[1,0,0],[0,1,0],[0,0,1]];st.forEach(s=>M=mul(s[1],M));
- const Q=P.map(p=>ap(M,p)),N='ABC';
- $('#out').innerHTML=`<h3>المصفوفة والحل</h3><p class="mut">${ex}</p>`+(st.length>1?st.map(s=>`<div>${s[0]} ${mat(s[1])}</div>`).join('')+'<b>المصفوفة النهائية:</b>':'')+`<div class="ltr">${mat(M)}</div>
- <table><tr><th>Point</th><th>Original</th><th>M·[x y 1]ᵀ</th><th>Result</th></tr>${P.map((p,i)=>`<tr><td>${N[i]}</td><td>(${p[0]}, ${p[1]})</td><td>→</td><td class="ok"><b>${N[i]}' (${f(Q[i][0])}, ${f(Q[i][1])})</b></td></tr>`).join('')}</table>`;
- const all=[...P,...Q,[px,py]].flat().map(Math.abs);draw(P,Q,Math.max(10,Math.ceil(Math.max(...all))+2),(op=='rp'||op=='sp')?[px,py]:null,op=='f'?$('#rf').value:null);return Q}
-function draw(P,Q,e,pv,ln){const c=$('#cv'),g=c.getContext('2d'),W=c.width,u=W/(2*e),X=x=>W/2+x*u,Y=y=>W/2-y*u;g.clearRect(0,0,W,W);g.font='12px sans-serif';
- const st=e>24?5:e>12?2:1;for(let k=-Math.floor(e/st)*st;k<=e;k+=st){g.strokeStyle=k?'#222b55':'#8d98d6';g.lineWidth=k?1:2;g.beginPath();g.moveTo(X(k),0);g.lineTo(X(k),W);g.moveTo(0,Y(k));g.lineTo(W,Y(k));g.stroke();if(k){g.fillStyle='#7f8cc4';g.fillText(k,X(k)+2,Y(0)+13);g.fillText(k,X(0)+4,Y(k)-3)}}
- if(ln=='d'||ln=='n'){g.strokeStyle='#3ddc97';g.setLineDash([6,5]);g.beginPath();g.moveTo(X(-e),Y(ln=='d'?-e:e));g.lineTo(X(e),Y(ln=='d'?e:-e));g.stroke();g.setLineDash([])}
- const poly=(p,col,s)=>{g.beginPath();p.forEach((q,i)=>i?g.lineTo(X(q[0]),Y(q[1])):g.moveTo(X(q[0]),Y(q[1])));g.closePath();g.fillStyle=col+'44';g.fill();g.strokeStyle=col;g.lineWidth=2.5;g.stroke();p.forEach((q,i)=>{g.fillStyle=col;g.beginPath();g.arc(X(q[0]),Y(q[1]),4,0,7);g.fill();g.fillText('ABC'[i]+s+` (${f(q[0])},${f(q[1])})`,X(q[0])+7,Y(q[1])-7)})};
- poly(P,'#6ea8ff','');poly(Q,'#ff9a56',"'");if(pv){g.fillStyle='#3ddc97';g.beginPath();g.arc(X(pv[0]),Y(pv[1]),6,0,7);g.fill();g.fillText('pivot',X(pv[0])+8,Y(pv[1])+14)}}
-
-/* ===== Microprocessor ===== */
-const TL=[[1971,'Intel 4004','أول microprocessor · 4-bit · 45 تعليمة · 50 KIPS'],[1971,'8008','8-bit · ذاكرة 16K · 48 تعليمة'],[1973,'8080','ذاكرة 64K · أسرع 10× (الجمع 2µs بدل 20µs) · TTL compatible'],[1977,'8085','آخر 8-bit · 769,230 تعليمة/ث · clock generator داخلي'],['1978/79','8086 / 8088','instruction queue · ضرب وقسمة · 246 تعليمة'],[1993,'Pentium','60–66 MHz · cache 16KB · ذاكرة 4GB · data bus 64-bit'],[1996,'Pentium Pro (P6)','3 integer units · L1 16K · L2 256K'],[1997,'Pentium II','على لوحة صغيرة · MMX'],[1999,'Pentium III','800MHz+ · L2 256KB · Dual Independent Bus'],[2000,'Pentium 4','حتى 3.2GHz · DDR / RAMBUS'],['حديثًا','Core i3 / i5 / i7','Multi-core و multithreaded applications']];
-$('#tl').innerHTML=TL.map(t=>`<div><b>${t[0]} — ${t[1]}</b><br><span class="mut">${t[2]}</span></div>`).join('');
-const DG='0123456789abcdefghijklmnopqrstuvwxyz',sup=n=>`<sup>${n}</sup>`;
-function parse(s,b){s=s.trim().toLowerCase();if(!s)return NaN;const[i,fr='']=s.split('.');let r=0,w=1/b;for(const c of i){const d=DG.indexOf(c);if(d<0||d>=b)return NaN;r=r*b+d}for(const c of fr){const d=DG.indexOf(c);if(d<0||d>=b)return NaN;r+=d*w;w/=b}return r}
-function conv(x,b,m=10){let i=Math.floor(x+1e-12),fr=x-i,s=i.toString(b).toUpperCase();if(fr>1e-9){s+='.';for(let k=0;k<m&&fr>1e-9;k++){fr*=b;const d=Math.floor(fr+1e-9);s+=DG[d].toUpperCase();fr-=d}}return s}
-function nl(){const b=Math.min(36,Math.max(2,v('nb'))),tb=Math.min(36,Math.max(2,v('nt'))),s=$('#nv').value.trim(),x=parse(s,b),o=$('#nout');
- if(isNaN(x)){o.innerHTML='<p class="bad">الرقم غير صحيح في الـ base المختار.</p>';return}
- const[is,fs='']=s.toLowerCase().split('.');const terms=[...is].map((c,k)=>`${c.toUpperCase()}×${b}${sup(is.length-1-k)}`).concat([...fs].map((c,k)=>`${c.toUpperCase()}×${b}${sup(-(k+1))}`));
- let n=Math.floor(x+1e-12),fr=x-n,rows='',L=[];while(n>0){const q=Math.floor(n/tb),r=n%tb;rows+=`<tr><td>${n}</td><td>÷ ${tb}</td><td>${q}</td><td class="ok">${DG[r].toUpperCase()}</td></tr>`;L.unshift(DG[r].toUpperCase());n=q}
- let fx='',F='';for(let k=0;k<8&&fr>1e-9;k++){const y=fr*tb,d=Math.floor(y+1e-9);fx+=`<tr><td>${f(fr)} × ${tb}</td><td>${f(y)}</td><td class="ok">${DG[d].toUpperCase()}</td></tr>`;F+=DG[d].toUpperCase();fr=y-d}
- o.innerHTML=`<h3>النتيجة في الأنظمة</h3><div class="chips ltr">${[2,8,10,16,tb].map(q=>`<span class="chip">(${q}) = <b>${conv(x,q)}</b></span>`).join('')}</div>
- <h3>القيمة بالأوزان (Weighted digits)</h3><div class="ltr">(${s.toUpperCase()})${sup(b)} = ${terms.join(' + ')} = <b class="ok">${+x.toFixed(6)}</b>${sup(10)}</div>
- <h3>التحويل من Decimal إلى base ${tb}</h3><div class="row" style="align-items:flex-start"><div><b>الجزء الصحيح: قسمة متكررة والباقي</b><table><tr><th>n</th><th></th><th>الناتج</th><th>الباقي</th></tr>${rows||'<tr><td colspan=4>0</td></tr>'}</table>نقرأ الباقي من <b>الأسفل لأعلى</b>: <b class="ltr ok">${L.join('')||0}</b></div>
- ${fx?`<div><b>الجزء الكسري: ضرب متكرر</b><table><tr><th>fraction×base</th><th>الناتج</th><th>الخانة</th></tr>${fx}</table>الكسر: <b class="ltr ok">0.${F}</b></div>`:''}</div>`}
-['nv','nb','nt'].forEach(i=>$('#'+i).oninput=nl);$$('[data-b]').forEach(b=>b.onclick=()=>{const x=parse($('#nv').value,v('nb'));if(!isNaN(x)){$('#nv').value=conv(x,+b.dataset.b);$('#nb').value=b.dataset.b;nl()}});
-function rg(){const R_=v('rr'),N=v('rn');$('#rout').innerHTML=R_>1&&N>0?`عدد القيم M = ${R_}${sup(N)} = <b>${(R_**N).toLocaleString()}</b> · المدى: 0 → ${(R_**N-1).toLocaleString()}`:''}
-['rr','rn'].forEach(i=>$('#'+i).oninput=rg);
-const pad=(s,n)=>s.padStart(n,'0');
-function fm(){const t=[...$('#at').value].slice(0,16);$('#aout').innerHTML=`<table><tr><th>Char</th><th>ASCII (dec)</th><th>Hex</th><th>Binary</th><th>Unicode</th></tr>${t.map(c=>{const n=c.codePointAt(0);return`<tr><td>${c==' '?'␣':c}</td><td>${n}</td><td>${n.toString(16).toUpperCase()}H</td><td>${pad(n.toString(2),n<128?7:16)}</td><td>U+${pad(n.toString(16).toUpperCase(),4)}</td></tr>`}).join('')}</table><span class="mut">ASCII كود من 7-bit (0–127) والـ Unicode بيخزن 16-bit.</span>`;
- const d=$('#bcd').value.replace(/\D/g,'');const u=[...d].map(x=>pad(+x+'',1)&&pad((+x).toString(2),4));let pk=[];for(let i=0;i<d.length;i+=2)pk.push(u[i]+' '+(u[i+1]||'0000'));
- $('#bout').innerHTML=d?`<div class="ltr">Unpacked (digit/byte): ${[...d].map(x=>'0000 '+pad((+x).toString(2),4)).join(' | ')}<br>Packed (2 digits/byte): ${pk.join(' | ')}</div>`:'';
- const h=$('#wd').value.replace(/[^0-9a-f]/gi,'').slice(0,4).padStart(4,'0'),w=parseInt(h,16),sg=w>=32768?w-65536:w;
- $('#wout').innerHTML=`<table><tr><th>Address</th><th>Content</th></tr><tr><td>0000 (lowest)</td><td>${h.slice(2).toUpperCase()} (LSB)</td></tr><tr><td>0001 (highest)</td><td>${h.slice(0,2).toUpperCase()} (MSB)</td></tr></table>Little-endian · Unsigned = <b>${w}</b> · Signed = <b>${sg}</b> <span class="mut">(الفرق في الـ bit الأيسر فقط)</span>`}
-['at','bcd','wd'].forEach(i=>$('#'+i).oninput=fm);
-
-/* ===== Quiz ===== */
-const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));let sc=0,tot=0,cur;
-const QS=[()=>{const x=rnd(1,9),y=rnd(1,9),a=rnd(1,6),b=rnd(1,6);return{q:`Translation: انقل النقطة (${x},${y}) بمقدار Tx=${a}, Ty=${b}. اكتب x,y`,a:`${x+a},${y+b}`,e:`x'=${x}+${a}=${x+a} ، y'=${y}+${b}=${y+b}`}},
-()=>{const x=rnd(1,9),y=rnd(1,9);return{q:`Rotation 90° CCW حول الأصل للنقطة (${x},${y}). اكتب x,y`,a:`${-y},${x}`,e:`cos90=0, sin90=1 ⇒ x'=−y=${-y} ، y'=x=${x}`}},
-()=>{const x=rnd(1,9),y=rnd(1,9),k=rnd(0,4),n=['X-axis','Y-axis','the origin','the line y=x','the line y=−x'],r=[[x,-y],[-x,y],[-x,-y],[y,x],[-y,-x]][k];return{q:`Reflection للنقطة (${x},${y}) حول ${n[k]}. اكتب x,y`,a:r.join(','),e:'استخدم مصفوفة الانعكاس المناسبة'}},
-()=>{const x=rnd(1,9),y=rnd(1,9),a=rnd(2,4),b=rnd(2,4);return{q:`Scaling للنقطة (${x},${y}) بـ Sx=${a}, Sy=${b}. اكتب x,y`,a:`${x*a},${y*b}`,e:`x'=${a}·${x}، y'=${b}·${y}`}},
-()=>{const n=rnd(5,63);return{q:`حوّل (${n})₁₀ إلى Binary`,a:n.toString(2),e:'قسمة متكررة على 2 وقراءة الباقي من الأسفل لأعلى'}},
-()=>{const n=rnd(16,255);return{q:`حوّل (${n.toString(16).toUpperCase()})₁₆ إلى Decimal`,a:''+n,e:'اضرب كل خانة في 16^k واجمع'}},
-()=>{const n=rnd(5,31);return{q:`حوّل (${n.toString(2)})₂ إلى Decimal`,a:''+n,e:'اضرب كل bit في 2^k واجمع'}},
-()=>{const n=rnd(2,6),b=rnd(2,3)*2;return{q:`كام قيمة ممكن نمثلها بـ ${n} خانات في النظام base ${b}؟`,a:''+b**n,e:`M = R^N = ${b}^${n}`}}];
-function nq(){cur=QS[rnd(0,QS.length-1)]();$('#qq').textContent=cur.q;$('#qa').value='';$('#qr').textContent=''}
-$('#qc').onclick=()=>{if(!cur||$('#qr').textContent)return;tot++;const a=$('#qa').value.replace(/[()\s]/g,'').toLowerCase(),ok=a==cur.a.toLowerCase();if(ok)sc++;$('#qr').innerHTML=ok?`<span class="ok">✔ إجابة صحيحة!</span> ${cur.e}`:`<span class="bad">✘ الإجابة الصحيحة: <span class="ltr">${cur.a}</span></span> — ${cur.e}`;$('#sc').textContent=sc+' / '+tot};
-$('#qn').onclick=nq;$('#qa').onkeydown=e=>{if(e.key=='Enter')$('#qc').click()};
-nl();rg();fm();nq();go(tabs.some(t=>'#'+t[0]==location.hash)?location.hash.slice(1):'home');
+const rd=x=>{x=Math.round(x*1e6)/1e6;return x===0?0:x},f2=x=>Math.round(x*100)/100||0;
+const ap=(M,q)=>{const n=M.length-1,v=[...q,1];return M.slice(0,n).map(r=>rd(r.reduce((s,x,k)=>s+x*v[k],0)))};
+let mode=2,tool='sel',sh=[],sel=-1,tmp=[],ghost=[],H=[],Rd=[],drag=null,ms=[0,0],S=24,S3=44,yaw=.6,pit=.45,o3={v:[],e:[]},g3=null,LOG=[];
+const cv=$('#cv'),g=cv.getContext('2d'),W=900,HT=600;
+const X=x=>W/2+x*S,Y=y=>HT/2-y*S,wx=p=>(p-W/2)/S,wy=p=>(HT/2-p)/S;
+const L=(a,b,c,d)=>{g.beginPath();g.moveTo(a,b);g.lineTo(c,d);g.stroke()};
+const sn=x=>$('#snap').checked?Math.round(x):Math.round(x*100)/100;
+const snap=()=>{H.push(JSON.stringify({sh,o3,sel}));Rd=[]};
+const rest=s=>{const o=JSON.parse(s);sh=o.sh;o3=o.o3;sel=o.sel;ghost=[];g3=null;all()};
+$('#un').onclick=()=>{if(!H.length)return;Rd.push(JSON.stringify({sh,o3,sel}));rest(H.pop())};
+$('#re').onclick=()=>{if(!Rd.length)return;H.push(JSON.stringify({sh,o3,sel}));rest(Rd.pop())};
+/* ---- transform UI ---- */
+const OP={2:{t:['Translate',['tx','ty'],[3,4]],s:['Scale',['sx','sy'],[2,2]],r:['Rotate',['θ°'],[90]],f:['Reflect',[],[]],h:['Shear',['shx','shy'],[1,0]]},3:{t:['Translate',['tx','ty','tz'],[2,1,2]],s:['Scale',['sx','sy','sz'],[2,2,2]],rx:['Rotate X',['θ°'],[90]],ry:['Rotate Y',['θ°'],[90]],rz:['Rotate Z',['θ°'],[90]],f:['Reflect',[],[]]}};
+const RF={2:{x:'about X-axis',y:'about Y-axis',o:'about Origin',d:'about y = x',n:'about y = −x'},3:{xy:'XY plane',yz:'YZ plane',xz:'XZ plane',o:'Origin'}};
+function setOps(){const o=OP[mode];$('#op').innerHTML=Object.keys(o).map(k=>`<option value="${k}">${o[k][0]}</option>`).join('');$('#rf').innerHTML=Object.keys(RF[mode]).map(k=>`<option value="${k}">${RF[mode][k]}</option>`).join('');$('#lz').classList.toggle('hid',mode==2);opCh()}
+function opCh(){const d=OP[mode][$('#op').value];['a','b','c'].forEach((k,i)=>{const l=$('#l'+k);l.classList.toggle('hid',i>=d[1].length);l.firstChild.textContent=d[1][i]||'';$('#'+k).value=d[2][i]??0});$('#rf').classList.toggle('hid',$('#op').value!='f');$('#pa').classList.toggle('hid',$('#op').value=='f');prev()}
+const pts=()=>mode==2?(sel>=0?sh[sel].p:sh.flatMap(s=>s.p)):o3.v;
+function pivot(){const m=mode,k=$('#pv').value;if(k=='o')return Array(m).fill(0);if(k=='p')return[N('pxv'),N('pyv'),N('pzv')].slice(0,m);const P=pts();if(!P.length)return Array(m).fill(0);return[...Array(m)].map((_,i)=>{const c=P.map(q=>q[i]);return(Math.min(...c)+Math.max(...c))/2})}
+function build(){const m=mode,op=$('#op').value,v=[N('a'),N('b'),N('c')],rf=$('#rf').value;
+ const Tr=w=>{const M=I(w.length+1);w.forEach((x,i)=>M[i][w.length]=x);return M},Sc=w=>{const M=I(w.length+1);w.forEach((x,i)=>M[i][i]=x);return M},em=r=>{const M=I(m+1);r.forEach((row,i)=>row.forEach((x,j)=>M[i][j]=x));return M};
+ const a=v[0]*Math.PI/180,c=+Math.cos(a).toFixed(10),s=+Math.sin(a).toFixed(10);let O;
+ if(op=='t')return Tr(v.slice(0,m));
+ if(op=='s')O=Sc(v.slice(0,m));if(op=='r')O=em([[c,-s],[s,c]]);
+ if(op=='rx')O=em([[1,0,0],[0,c,-s],[0,s,c]]);if(op=='ry')O=em([[c,0,s],[0,1,0],[-s,0,c]]);if(op=='rz')O=em([[c,-s,0],[s,c,0],[0,0,1]]);
+ if(op=='h')O=em([[1,v[0]],[v[1],1]]);
+ if(op=='f')O=m==2?(rf=='d'?em([[0,1],[1,0]]):rf=='n'?em([[0,-1],[-1,0]]):Sc({x:[1,-1],y:[-1,1],o:[-1,-1]}[rf])):Sc({xy:[1,1,-1],yz:[-1,1,1],xz:[1,-1,1],o:[-1,-1,-1]}[rf]);
+ const p=pivot();return mul(mul(Tr(p),O),Tr(p.map(x=>-x)))}
+const mh=M=>`<span class="mx"><table>${M.map(r=>'<tr>'+r.map(x=>`<td>${f2(x)}</td>`).join('')+'</tr>').join('')}</table></span>`;
+function prev(){if(mode==='i')return;$('#mat').innerHTML=mh(build())}
+$('#op').onchange=opCh;['a','b','c','rf','pv','pxv','pyv','pzv'].forEach(i=>$('#'+i).oninput=prev);
+$('#ap').onclick=()=>{const M=build(),name=$('#op').selectedOptions[0].text;snap();
+ if(mode==2){const T=sel>=0?[sel]:sh.map((_,i)=>i);ghost=T.map(i=>JSON.parse(JSON.stringify(sh[i])));T.forEach(i=>sh[i].p=sh[i].p.map(q=>ap(M,q)))}
+ else{g3=o3.v.map(q=>q.slice());o3.v=o3.v.map(q=>ap(M,q))}
+ LOG.unshift(`<div><b>${name}</b> ${mode==2?'':'3D '}${mh(M)}</div>`);all()};
+/* ---- 2D ---- */
+const LT='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function path(p){g.beginPath();p.forEach((q,i)=>i?g.lineTo(X(q[0]),Y(q[1])):g.moveTo(X(q[0]),Y(q[1])));g.closePath()}
+function d2(){g.fillStyle='#0e1430';g.fillRect(0,0,W,HT);
+ if($('#grid').checked){const nx=Math.ceil(W/2/S),ny=Math.ceil(HT/2/S);g.font='11px sans-serif';for(let k=-nx;k<=nx;k++){g.strokeStyle=k?'#1b2452':'#8d98d6';g.lineWidth=k?1:2;L(X(k),0,X(k),HT);if(k&&k%5==0){g.fillStyle='#7f8cc4';g.fillText(k,X(k)+2,Y(0)+12)}}for(let k=-ny;k<=ny;k++){g.strokeStyle=k?'#1b2452':'#8d98d6';g.lineWidth=k?1:2;L(0,Y(k),W,Y(k));if(k&&k%5==0){g.fillStyle='#7f8cc4';g.fillText(k,X(0)+4,Y(k)-2)}}}
+ const rf=$('#rf').value;if($('#op').value=='f'&&(rf=='d'||rf=='n')){g.strokeStyle='#3ddc97';g.setLineDash([6,5]);g.lineWidth=1.5;L(X(-40),Y(rf=='d'?-40:40),X(40),Y(rf=='d'?40:-40));g.setLineDash([])}
+ g.setLineDash([6,5]);ghost.forEach(s=>{path(s.p);g.strokeStyle='#ff9a56';g.lineWidth=2;g.stroke()});g.setLineDash([]);
+ sh.forEach((s,i)=>{path(s.p);g.fillStyle=s.c+'55';g.fill();g.strokeStyle=i==sel?'#fff':s.c;g.lineWidth=i==sel?3:2;g.stroke();
+  if(i==sel||sel<0&&s.p.length<8){g.font='12px sans-serif';s.p.forEach((q,k)=>{g.fillStyle=s.c;g.beginPath();g.arc(X(q[0]),Y(q[1]),4,0,7);g.fill();g.fillStyle='#e8ecff';g.fillText(`${LT[k%26]} (${f2(q[0])},${f2(q[1])})`,X(q[0])+7,Y(q[1])-7)})}});
+ const pv=$('#pv').value;if(pv!='o'){const p=pivot();g.fillStyle='#3ddc97';g.beginPath();g.arc(X(p[0]),Y(p[1]),6,0,7);g.fill();g.fillText('pivot',X(p[0])+8,Y(p[1])+14)}
+ g.strokeStyle=$('#col').value;g.lineWidth=2;if(tmp.length){g.beginPath();tmp.concat([ms]).forEach((q,i)=>i?g.lineTo(X(q[0]),Y(q[1])):g.moveTo(X(q[0]),Y(q[1])));g.stroke()}
+ if(drag&&drag.t=='rect'){g.strokeRect(X(drag.x),Y(drag.y),(ms[0]-drag.x)*S,-(ms[1]-drag.y)*S)}
+ if(drag&&drag.t=='circ'){g.beginPath();g.arc(X(drag.x),Y(drag.y),Math.hypot(ms[0]-drag.x,ms[1]-drag.y)*S,0,7);g.stroke()}}
+const ev=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]};
+function hit(x,y){for(let i=sh.length-1;i>=0;i--){const p=sh[i].p;let c=false;for(let a=0,b=p.length-1;a<p.length;b=a++)if((p[a][1]>y)!=(p[b][1]>y)&&x<(p[b][0]-p[a][0])*(y-p[a][1])/(p[b][1]-p[a][1])+p[a][0])c=!c;if(c||p.some(q=>Math.hypot(q[0]-x,q[1]-y)*S<9))return i}return-1}
+function fin(){if(tmp.length>=3){snap();sh.push({p:tmp,c:$('#col').value});sel=sh.length-1}tmp=[];all()}
+cv.onpointerdown=e=>{const[mx,my]=ev(e);cv.setPointerCapture(e.pointerId);
+ if(mode==3){drag={t:'orb',x:mx,y:my};return}
+ const x=sn(wx(mx)),y=sn(wy(my));
+ if(e.shiftKey){$('#pv').value='p';$('#pxv').value=x;$('#pyv').value=y;prev();d2();return}
+ if(tool=='sel'){sel=hit(wx(mx),wy(my));if(sel>=0){snap();drag={t:'mv',x,y,o:JSON.parse(JSON.stringify(sh[sel].p))}}all()}
+ else if(tool=='poly'){tmp.push([x,y]);d2()}else drag={t:tool,x,y}};
+cv.onpointermove=e=>{const[mx,my]=ev(e);
+ if(mode==3){if(drag){yaw+=(mx-drag.x)*.01;pit=Math.max(-1.5,Math.min(1.5,pit+(my-drag.y)*.01));drag.x=mx;drag.y=my;d3()}return}
+ ms=[sn(wx(mx)),sn(wy(my))];$('#st').textContent=`x: ${f2(wx(mx))}  y: ${f2(wy(my))}`;
+ if(drag&&drag.t=='mv'){const dx=ms[0]-drag.x,dy=ms[1]-drag.y;sh[sel].p=drag.o.map(q=>[q[0]+dx,q[1]+dy])}d2();if(drag)tbl()};
+cv.onpointerup=e=>{if(mode==3){drag=null;return}
+ if(drag){const c=$('#col').value;if(drag.t=='rect'&&(ms[0]!=drag.x&&ms[1]!=drag.y)){snap();sh.push({p:[[drag.x,drag.y],[ms[0],drag.y],[ms[0],ms[1]],[drag.x,ms[1]]],c});sel=sh.length-1}
+ if(drag.t=='circ'){const r=Math.hypot(ms[0]-drag.x,ms[1]-drag.y);if(r>0){snap();sh.push({p:[...Array(40)].map((_,i)=>[drag.x+r*Math.cos(i*Math.PI/20),drag.y+r*Math.sin(i*Math.PI/20)].map(rd)),c});sel=sh.length-1}}
+ if(drag.t=='mv'&&JSON.stringify(sh[sel].p)==JSON.stringify(drag.o))H.pop()}
+ drag=null;all()};
+cv.ondblclick=()=>{if(tool=='poly'){tmp.pop();fin()}};
+cv.onwheel=e=>{e.preventDefault();const k=e.deltaY<0?1.1:.9;if(mode==3)S3*=k;else S=Math.max(6,Math.min(100,S*k));all()};
+addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(e.key=='Enter')fin();if(e.key=='Escape'){tmp=[];all()}if(e.key=='Delete')$('#del').click();if(e.ctrlKey&&e.key=='z')$('#un').click()});
+$('#del').onclick=()=>{if(sel>=0){snap();sh.splice(sel,1);sel=-1;all()}};$('#clr').onclick=()=>{snap();sh=[];sel=-1;ghost=[];all()};
+$$('#tools button').forEach(b=>b.onclick=()=>{tool=b.dataset.t;tmp=[];$$('#tools button').forEach(x=>x.classList.toggle('on',x==b))});
+$('#col').oninput=()=>{if(sel>=0){sh[sel].c=$('#col').value;d2()}};['grid','snap'].forEach(i=>$('#'+i).onchange=d2);
+$('#pre2').onchange=e=>{const m=[...e.target.value.matchAll(/\((-?\d+),(-?\d+)\)/g)].map(a=>[+a[1],+a[2]]);if(m.length){snap();sh.push({p:m,c:$('#col').value});sel=sh.length-1;all()}e.target.value=''};
+/* ---- 3D ---- */
+const OB={cube:{v:[[0,0,0],[2,0,0],[2,2,0],[0,2,0],[0,0,2],[2,0,2],[2,2,2],[0,2,2]],e:[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]]},
+pyr:{v:[[0,0,0],[2,0,0],[2,0,2],[0,0,2],[1,2,1]],e:[[0,1],[1,2],[2,3],[3,0],[0,4],[1,4],[2,4],[3,4]]},
+tet:{v:[[0,3,1],[3,3,2],[3,0,0],[0,0,0]],e:[[0,1],[1,2],[2,0],[0,3],[1,3],[2,3]]},
+prism:{v:[[0,0,0],[3,0,0],[0,3,0],[0,0,2],[3,0,2],[0,3,2]],e:[[0,1],[1,2],[2,0],[3,4],[4,5],[5,3],[0,3],[1,4],[2,5]]}};
+const load3=k=>{o3=JSON.parse(JSON.stringify(OB[k]));g3=null};
+$('#pre3').onchange=e=>{snap();load3(e.target.value);all()};$('#per').onchange=d3;
+function pj(p){const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pit),sp=Math.sin(pit),x=p[0]*cy+p[2]*sy,z1=-p[0]*sy+p[2]*cy,y=p[1]*cp-z1*sp,z=p[1]*sp+z1*cp,k=$('#per').checked?16/(16-z):1;return[W/2+x*S3*k,HT/2-y*S3*k]}
+function d3(){g.fillStyle='#0e1430';g.fillRect(0,0,W,HT);g.font='13px sans-serif';
+ [[[6,0,0],'X','#ff6b7a'],[[0,6,0],'Y','#3ddc97'],[[0,0,6],'Z','#6ea8ff']].forEach(([p,n,c])=>{const a=pj([0,0,0]),b=pj(p),m=pj(p.map(x=>-x));g.strokeStyle=c;g.lineWidth=1.5;g.setLineDash([4,4]);L(m[0],m[1],a[0],a[1]);g.setLineDash([]);L(a[0],a[1],b[0],b[1]);g.fillStyle=c;g.fillText(n,b[0]+5,b[1]-5)});
+ const dr=(v,c,d)=>{g.strokeStyle=c;g.lineWidth=2;g.setLineDash(d?[6,5]:[]);o3.e.forEach(([i,j])=>{const a=pj(v[i]),b=pj(v[j]);L(a[0],a[1],b[0],b[1])});g.setLineDash([])};
+ if(g3)dr(g3,'#ff9a56',1);dr(o3.v,'#6ea8ff');
+ o3.v.forEach((q,i)=>{const p=pj(q);g.fillStyle='#fff';g.beginPath();g.arc(p[0],p[1],4,0,7);g.fill();g.fillText(LT[i%26],p[0]+7,p[1]-7)})}
+/* ---- Image lab ---- */
+const ci=$('#ci'),gi=ci.getContext('2d'),src=document.createElement('canvas');src.width=src.height=256;
+(function(){const s=src.getContext('2d'),gr=s.createLinearGradient(0,0,256,256);gr.addColorStop(0,'#ff6b7a');gr.addColorStop(.5,'#ffd166');gr.addColorStop(1,'#3a86ff');s.fillStyle=gr;s.fillRect(0,0,256,256);s.fillStyle='#0a0f22';s.beginPath();s.arc(128,128,80,0,7);s.fill();s.fillStyle='#fff';s.font='bold 70px sans-serif';s.textAlign='center';s.fillText('KM',128,150);s.fillRect(20,20,60,10)})();
+function img(){const n=+$('#iN').value,b=+$('#iq').value,Lv=2**b;$('#iqv').textContent=b;const t=document.createElement('canvas');t.width=t.height=n;const c=t.getContext('2d');
+ c.translate(n/2,n/2);c.rotate(N('ir')*Math.PI/180);const sc=N('is')||1;c.scale((ifx.checked?-1:1)*sc,(ify.checked?-1:1)*sc);c.translate(-n/2,-n/2);c.drawImage(src,0,0,n,n);
+ const d=c.getImageData(0,0,n,n),a=d.data;for(let i=0;i<a.length;i+=4){if(ig.checked)a[i]=a[i+1]=a[i+2]=.299*a[i]+.587*a[i+1]+.114*a[i+2];for(let k=0;k<3;k++)a[i+k]=Math.round(a[i+k]/255*(Lv-1))/(Lv-1)*255}
+ c.setTransform(1,0,0,1,0,0);c.putImageData(d,0,0);gi.fillStyle='#0e1430';gi.fillRect(0,0,600,600);gi.imageSmoothingEnabled=ism.checked;gi.drawImage(t,0,0,600,600);$('#st').textContent=`${n}×${n} px · ${Lv} levels · ${n*n*b*(ig.checked?1:3)} bits`}
+['iN','iq','ig','ifx','ify','ir','is','ism'].forEach(i=>$('#'+i).oninput=img);
+$('#fl').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const s=src.getContext('2d');s.clearRect(0,0,256,256);s.drawImage(im,0,0,256,256);img()};im.src=URL.createObjectURL(f)};
+/* ---- shared ---- */
+function tbl(){const P=mode==2?(sel>=0?sh[sel].p:[]):o3.v;$('#tbl').innerHTML=P.length?`<table><tr><th></th><th>x</th><th>y</th>${mode==3?'<th>z</th>':''}</tr>${P.map((q,i)=>`<tr><td>${LT[i%26]}</td>${q.map(x=>`<td>${f2(x)}</td>`).join('')}</tr>`).join('')}</table>`:'<span class="hint">Select a shape</span>'}
+function all(){if(mode=='i')return;mode==2?d2():d3();tbl();prev();$('#log').innerHTML=LOG.slice(0,12).join('')}
+$$('header [data-m]').forEach(b=>b.onclick=()=>{mode=b.dataset.m=='i'?'i':+b.dataset.m;$$('header [data-m]').forEach(x=>x.classList.toggle('on',x==b));
+ $$('[data-md]').forEach(e=>e.classList.toggle('hid',!e.dataset.md.includes(mode)));cv.classList.toggle('hid',mode=='i');ci.classList.toggle('hid',mode!='i');
+ if(mode=='i')img();else{setOps();all()}});
+$('#dl').onclick=()=>{const c=mode=='i'?ci:cv,a=document.createElement('a');a.download='km_graph.png';a.href=c.toDataURL();a.click()};
+const ifx=$('#ifx'),ify=$('#ify'),ig=$('#ig'),ism=$('#ism');
+load3('tet');snap();H=[];sh=[{p:[[3,4],[6,4],[5,6]],c:'#6ea8ff'}];sel=0;
+$$('[data-md]').forEach(e=>e.classList.toggle('hid',!e.dataset.md.includes(mode)));setOps();all();
 </script>
 </body>
 </html>
